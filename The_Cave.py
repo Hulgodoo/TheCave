@@ -25,6 +25,9 @@ textcolor = (255, 255, 255)
 image1 = pygame.image.load("logo.png")
 image1 = pygame.transform.scale(image1, (LARGEUR, HAUTEUR))
 
+# Variables du jeu
+level = "menu"
+
 def afficher_texte(texte, x, y, couleur):
     """
     Cette fonction permet d'afficher du texte dans une fenêtre Pygame à partir d'une position donnée (x, y). Si une ligne de texte dépasse
@@ -106,6 +109,72 @@ def dessiner_bouton(texte, x, y, largeur, hauteur, couleur1, couleur2, couleurte
     texte_rect = texte_surface.get_rect(center=(x + largeur_bouton // 2, y + hauteur_bouton // 2))
     fenetre.blit(texte_surface, texte_rect)
 
+def choix_gauche():
+    """
+    Cette fonction permet de changer de scene lorsqu'on a choisi le bouton de gauche. 
+
+    """
+    global scene
+
+    if scene == "menu":
+        scene = "choices"
+    elif scene == "choices":
+        scene = "mineur"
+    elif scene == "mineur":
+        scene = "choices"
+
+def choix_droite():
+    """
+    Cette fonction permet de changer de scene lorsqu'on a choisi le bouton de droite. 
+
+    """
+    global scene
+
+    if scene == "menu":
+        scene = "choices"
+    elif scene == "choices":
+        scene = "monstres"
+    elif scene == "monstres":
+        scene = "choices"
+
+def menu():
+    """
+    Cette fonction permet d'afficher le menu. 
+
+    """
+    # Afficher l'image à l'écran, le coin en haut à gauche à la coordonnée 0,0
+    fenetre.blit(image1, (0, 0))
+    
+    #Afficher du texte
+    afficher_texte("The Cave", 425, 400, textcolor)
+
+    dessiner_bouton("Play", 525, 625, 200, 50, color, color, textcolor, choices)
+
+def choices():
+    """
+
+    Cette fonction permet d'afficher les choix.
+
+    """
+
+    # Charger une image et la redimensionner 
+    gauche = pygame.image.load("cart.png")
+    gauche = pygame.transform.scale(gauche, (650, 900))
+    fenetre.blit(gauche, (0, 0))
+
+    droite = pygame.image.load("entrance.png")
+    droite = pygame.transform.scale(droite, (650, 900))
+    fenetre.blit(droite, (650, 0))
+
+    #Afficher du texte
+    afficher_texte("Choose.", 425, 400, textcolor)
+
+    dessiner_bouton("^", 325, 325, 200, 50, color, color, textcolor, choix_gauche)
+    dessiner_bouton("^", 975, 325, 200, 50, color, color, textcolor, choix_droite)
+
+
+
+
 fin = False
 
 # Boucle principale du jeu, tant que le jeu n'est pas fini on continue
@@ -119,16 +188,10 @@ while fin == False:
             fin = True
             pygame.quit()
 
-    # Remplir l'écran de bleu
-    #fenetre.fill(color)
-    
-    # Afficher l'image à l'écran, le coin en haut à gauche à la coordonnée 0,0
-    fenetre.blit(image1, (0, 0))
-    
-    #Afficher du texte
-    afficher_texte("The Cave", 425, 400, textcolor)
-
-    dessiner_bouton("Play", 525, 625, 200, 50, color, color, textcolor, afficher_texte)
-
+    # Afficher le niveau
+    if level == "menu":
+        menu()
+    elif level == "choices":
+        choices()
     # Mise à jour de l'affichage
     pygame.display.flip()
