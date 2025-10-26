@@ -19,6 +19,7 @@ font = pygame.font.Font("KiwiSoda.ttf", 100)
 
 # Définition des variables des couleurs à utiliser dans le programme
 color = (0, 0, 0)
+bleu = (116, 208, 241)
 textcolor = (255, 255, 255)
 
 # Charger une image et la redimensionner 
@@ -36,11 +37,8 @@ def afficher_texte(texte, x, y, couleur):
     Paramètres :
     -----------
         texte(str) : Le texte à afficher.
-        
         x(int) : La position en pixels sur l'axe des abscisses (horizontal) où le texte commence à être affiché.
-        
         y(int) : La position en pixels sur l'axe des ordonnées (vertical) où le texte commence à être affiché.
-        
         couleur(tuple): Une couleur définie sous forme de tuple (R, G, B) pour la couleur du texte.
     """
     mots = texte.split(' ')
@@ -69,21 +67,13 @@ def dessiner_bouton(texte, x, y, largeur, hauteur, couleur1, couleur2, couleurte
     Paramètres :
     -----------
         texte (str) : Le texte à afficher à l'intérieur du bouton.
-
         x (int) : La position en pixels sur l'axe des abscisses (horizontal) où le bouton commence à être dessiné.
-
         y (int) : La position en pixels sur l'axe des ordonnées (vertical) où le bouton commence à être dessiné.
-
         largeur (int) : La largeur souhaitée du bouton. La largeur réelle sera ajustée en fonction de la taille du texte.
-
         hauteur (int) : La hauteur souhaitée du bouton. La hauteur réelle sera ajustée en fonction de la taille du texte.
-
         couleur1 (tuple) : La couleur du bouton sous forme de tuple (R, G, B) lorsque la souris n'est pas dessus.
-
         couleur2 (tuple) : La couleur du bouton sous forme de tuple (R, G, B) lorsque la souris survole le bouton.
-
         couleurtexte (tuple) : La couleur du texte du bouton sous forme de tuple (R, G, B).
-
         action (fonction, optionnel) : Une fonction à exécuter lorsque le bouton est cliqué. Par défaut, aucune action n'est exécutée.
     """
     
@@ -114,49 +104,52 @@ def choix_gauche():
     Cette fonction permet de changer de scene lorsqu'on a choisi le bouton de gauche. 
 
     """
-    global scene
+    global level
 
-    if scene == "menu":
-        scene = "choices"
-    elif scene == "choices":
-        scene = "mineur"
-    elif scene == "mineur":
-        scene = "choices"
+    if level == "menu":
+        level = "choices"
+    elif level == "choices":
+        level = "mineur"
+    elif level == "mineur":
+        level = "choices"
 
 def choix_droite():
     """
     Cette fonction permet de changer de scene lorsqu'on a choisi le bouton de droite. 
 
     """
-    global scene
+    global level
 
-    if scene == "menu":
-        scene = "choices"
-    elif scene == "choices":
-        scene = "monstres"
-    elif scene == "monstres":
-        scene = "choices"
+    if level == "menu":
+        level = "choices"
+    elif level == "choices":
+        level = "monstres"
+    elif level == "monstres":
+        level = "choices"
 
 def menu():
     """
     Cette fonction permet d'afficher le menu. 
 
     """
+    global level
     # Afficher l'image à l'écran, le coin en haut à gauche à la coordonnée 0,0
     fenetre.blit(image1, (0, 0))
     
     #Afficher du texte
     afficher_texte("The Cave", 425, 400, textcolor)
 
-    dessiner_bouton("Play", 525, 625, 200, 50, color, color, textcolor, choices)
+    dessiner_bouton("Play", 525, 625, 200, 50, color, color, textcolor, choix_droite)
 
 def choices():
-    """
 
+    """
     Cette fonction permet d'afficher les choix.
 
     """
+    global level
 
+    level == "choices"
     # Charger une image et la redimensionner 
     gauche = pygame.image.load("cart.png")
     gauche = pygame.transform.scale(gauche, (650, 900))
@@ -171,6 +164,24 @@ def choices():
 
     dessiner_bouton("^", 325, 325, 200, 50, color, color, textcolor, choix_gauche)
     dessiner_bouton("^", 975, 325, 200, 50, color, color, textcolor, choix_droite)
+
+def monstres():
+    
+    """
+    Cette fonction permet d'afficher les monstres.
+
+    """
+    global level
+
+    level == "monstres"
+    # Charger une image et la redimensionner 
+    image = pygame.image.load("dragon.png")
+    fenetre.blit(image, (0, 0))
+
+    #Afficher du texte
+    afficher_texte("Fight !", 425, 400, textcolor)
+
+    dessiner_bouton("Taper", 525, 625, 200, 50, color, color, textcolor, choix_droite)
 
 
 
@@ -187,11 +198,13 @@ while fin == False:
         if event.type == pygame.QUIT:
             fin = True
             pygame.quit()
-
+    fenetre.fill(bleu)
     # Afficher le niveau
     if level == "menu":
         menu()
     elif level == "choices":
         choices()
+    elif level == "monstres":
+        monstres()
     # Mise à jour de l'affichage
     pygame.display.flip()
