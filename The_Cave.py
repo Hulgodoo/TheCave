@@ -183,6 +183,24 @@ def monstres():
 
     dessiner_bouton("Taper", 525, 625, 200, 50, color, color, textcolor, choix_droite)
 
+def mineur():
+    
+    """
+    Cette fonction permet d'afficher les monstres.
+
+    """
+    global level
+
+    level == "mineur"
+    # Charger une image et la redimensionner 
+    image = pygame.image.load("mineur.png")
+    fenetre.blit(image, (0, 0))
+
+    #Afficher du texte
+    afficher_texte("Buy", 425, 400, textcolor)
+
+    dessiner_bouton("Prendre", 525, 625, 200, 50, color, color, textcolor, choix_gauche)
+
 
 
 
@@ -206,5 +224,7 @@ while fin == False:
         choices()
     elif level == "monstres":
         monstres()
+    elif level == "mineur":
+        mineur()
     # Mise à jour de l'affichage
     pygame.display.flip()
