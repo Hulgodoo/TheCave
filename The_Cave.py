@@ -28,6 +28,8 @@ image1 = pygame.transform.scale(image1, (LARGEUR, HAUTEUR))
 
 # Variables du jeu
 level = "menu"
+nb_level = 0
+lives = 5
 
 def afficher_texte(texte, x, y, couleur):
     """
@@ -105,10 +107,12 @@ def choix_gauche():
 
     """
     global level
+    global nb_level
 
     if level == "menu":
         level = "choices"
     elif level == "choices":
+        nb_level = nb_level + 1
         level = "mineur"
     elif level == "mineur":
         level = "choices"
@@ -119,13 +123,28 @@ def choix_droite():
 
     """
     global level
+    global nb_level
+    global lives
 
     if level == "menu":
         level = "choices"
     elif level == "choices":
+        nb_level = nb_level + 1
         level = "monstres"
     elif level == "monstres":
         level = "choices"
+        lives = lives - 1
+        
+
+
+def afficher_vies():
+    """
+    Cette fonction permet d'afficher la vie que le joueur a. 
+
+    """
+    global lives
+
+    afficher_texte(str(lives), 0, 0, textcolor)
 
 def menu():
     """
@@ -148,6 +167,7 @@ def choices():
 
     """
     global level
+    global fin
 
     level == "choices"
     # Charger une image et la redimensionner 
@@ -164,6 +184,7 @@ def choices():
 
     dessiner_bouton("^", 325, 325, 200, 50, color, color, textcolor, choix_gauche)
     dessiner_bouton("^", 975, 325, 200, 50, color, color, textcolor, choix_droite)
+    
 
 def monstres():
     
@@ -176,6 +197,7 @@ def monstres():
     level == "monstres"
     # Charger une image et la redimensionner 
     image = pygame.image.load("dragon.png")
+    image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
     fenetre.blit(image, (0, 0))
 
     #Afficher du texte
@@ -194,13 +216,13 @@ def mineur():
     level == "mineur"
     # Charger une image et la redimensionner 
     image = pygame.image.load("mineur.png")
+    image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
     fenetre.blit(image, (0, 0))
 
     #Afficher du texte
     afficher_texte("Buy", 425, 400, textcolor)
 
     dessiner_bouton("Prendre", 525, 625, 200, 50, color, color, textcolor, choix_gauche)
-
 
 
 
@@ -216,15 +238,27 @@ while fin == False:
         if event.type == pygame.QUIT:
             fin = True
             pygame.quit()
-    fenetre.fill(bleu)
+    
+    afficher_vies()
+    
     # Afficher le niveau
     if level == "menu":
         menu()
     elif level == "choices":
         choices()
+        afficher_vies()    
     elif level == "monstres":
         monstres()
+        afficher_vies() 
     elif level == "mineur":
         mineur()
+        afficher_vies()
+
+    if lives == 0:
+        fenetre.fill(color)
+        afficher_texte("Dead", 425, 400, textcolor)
+        fin = True
     # Mise à jour de l'affichage
     pygame.display.flip()
+time.sleep(5)
+pygame.quit()
