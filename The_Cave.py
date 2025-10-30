@@ -29,7 +29,7 @@ image1 = pygame.transform.scale(image1, (LARGEUR, HAUTEUR))
 # Variables du jeu
 level = "menu"
 nb_level = 0
-lives = 5
+lives = 2
 
 def afficher_texte(texte, x, y, couleur):
     """
@@ -112,10 +112,10 @@ def choix_gauche():
     if level == "menu":
         level = "choices"
     elif level == "choices":
-        nb_level = nb_level + 1
         level = "mineur"
     elif level == "mineur":
         level = "choices"
+        nb_level = nb_level + 1
 
 def choix_droite():
     """
@@ -129,11 +129,11 @@ def choix_droite():
     if level == "menu":
         level = "choices"
     elif level == "choices":
-        nb_level = nb_level + 1
         level = "monstres"
     elif level == "monstres":
         level = "choices"
         lives = lives - 1
+        nb_level = nb_level + 1
         
 
 
@@ -180,10 +180,10 @@ def choices():
     fenetre.blit(droite, (650, 0))
 
     #Afficher du texte
-    afficher_texte("Choose.", 425, 400, textcolor)
+    afficher_texte("Choose.", 500, 400, textcolor)
 
-    dessiner_bouton("^", 325, 325, 200, 50, color, color, textcolor, choix_gauche)
-    dessiner_bouton("^", 975, 325, 200, 50, color, color, textcolor, choix_droite)
+    dessiner_bouton("^", 250, 550, 200, 50, color, color, textcolor, choix_gauche)
+    dessiner_bouton("^", 900, 550, 200, 50, color, color, textcolor, choix_droite)
     
 
 def monstres():
@@ -201,9 +201,9 @@ def monstres():
     fenetre.blit(image, (0, 0))
 
     #Afficher du texte
-    afficher_texte("Fight !", 425, 400, textcolor)
+    afficher_texte("Fight !", 500, 400, textcolor)
 
-    dessiner_bouton("Taper", 525, 625, 200, 50, color, color, textcolor, choix_droite)
+    dessiner_bouton("Taper", 500, 625, 200, 50, color, color, textcolor, choix_droite)
 
 def mineur():
     
@@ -220,10 +220,25 @@ def mineur():
     fenetre.blit(image, (0, 0))
 
     #Afficher du texte
-    afficher_texte("Buy", 425, 400, textcolor)
+    afficher_texte("Buy", 550, 400, textcolor)
 
-    dessiner_bouton("Prendre", 525, 625, 200, 50, color, color, textcolor, choix_gauche)
+    dessiner_bouton("Prendre", 460, 625, 200, 50, color, color, textcolor, choix_gauche)
 
+def boss():
+       
+    """
+    Cette fonction permet d'afficher le boss du jeu.
+
+    """ 
+    image = pygame.image.load("final_entrance(wip).png")
+    image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
+    fenetre.blit(image, (0, 0))
+    time.sleep(2)
+    fenetre.fill(color)
+    time.sleep(2)
+    image2 = pygame.image.load("boss1.png")
+    image2 = pygame.transform.scale(image2, (LARGEUR, HAUTEUR))
+    fenetre.blit(image2, (0, 0))
 
 
 fin = False
@@ -254,9 +269,11 @@ while fin == False:
         mineur()
         afficher_vies()
 
+    if nb_level == 5:
+        boss()
     if lives == 0:
         fenetre.fill(color)
-        afficher_texte("Dead", 425, 400, textcolor)
+        afficher_texte("Dead", 525, 400, textcolor)
         fin = True
     # Mise à jour de l'affichage
     pygame.display.flip()
