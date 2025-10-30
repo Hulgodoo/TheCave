@@ -30,6 +30,8 @@ image1 = pygame.transform.scale(image1, (LARGEUR, HAUTEUR))
 level = "menu"
 nb_level = 0
 lives = 2
+objects = ("dynamite", "boots", "pickaxe", "4", "5")
+inventory = ()
 
 def afficher_texte(texte, x, y, couleur):
     """
