@@ -134,6 +134,7 @@ def choix_droite():
         level = "choices"
         lives = lives - 1
         nb_level = nb_level + 1
+    
         
 
 
@@ -220,9 +221,9 @@ def mineur():
     fenetre.blit(image, (0, 0))
 
     #Afficher du texte
-    afficher_texte("Buy", 550, 400, textcolor)
+    afficher_texte("Take this", 425, 400, textcolor)
 
-    dessiner_bouton("Prendre", 460, 625, 200, 50, color, color, textcolor, choix_gauche)
+    dessiner_bouton("^", 530, 825, 200, 50, color, color, textcolor, choix_gauche)
 
 def boss():
        
@@ -230,15 +231,25 @@ def boss():
     Cette fonction permet d'afficher le boss du jeu.
 
     """ 
+    global nb_level
+    global level
+
     image = pygame.image.load("final_entrance(wip).png")
     image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
     fenetre.blit(image, (0, 0))
-    time.sleep(2)
+    pygame.display.flip()
+    pygame.time.wait(2000)  # 2000 ms = 2 secondes
+    
     fenetre.fill(color)
-    time.sleep(2)
+    pygame.display.flip()
+    pygame.time.wait(1000)
+    
     image2 = pygame.image.load("boss1.png")
     image2 = pygame.transform.scale(image2, (LARGEUR, HAUTEUR))
     fenetre.blit(image2, (0, 0))
+
+    nb_level = 99
+    level = "end"
 
 
 fin = False
@@ -255,6 +266,8 @@ while fin == False:
             pygame.quit()
     
     afficher_vies()
+    if nb_level == 5:
+        level = "boss"
     
     # Afficher le niveau
     if level == "menu":
@@ -268,9 +281,9 @@ while fin == False:
     elif level == "mineur":
         mineur()
         afficher_vies()
-
-    if nb_level == 5:
+    elif level == "boss":
         boss()
+        afficher_vies()
     if lives == 0:
         fenetre.fill(color)
         afficher_texte("Dead", 525, 400, textcolor)
