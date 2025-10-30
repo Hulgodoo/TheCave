@@ -113,11 +113,18 @@ def choix_gauche():
 
     if level == "menu":
         level = "choices"
-    elif level == "choices":
+    elif level == "choices" and (nb_level == 1 or nb_level == 3):
+        level = "monstres"
+    elif level == "choices" and (nb_level == 0 or nb_level == 2 or nb_level == 4):
         level = "mineur"
+    elif level == "monstres":
+        level = "choices"
+        lives = lives - 1
+        nb_level = nb_level + 1
     elif level == "mineur":
         level = "choices"
-        nb_level = nb_level + 1
+        nb_level = nb_level + 1  
+
 
 def choix_droite():
     """
