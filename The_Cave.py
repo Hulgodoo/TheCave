@@ -263,6 +263,35 @@ def boss():
     nb_level = 99
     level = "end"
 
+def afficher_objet(objet):
+
+    """
+    Cette fonction permet d'afficher un objet.
+
+    Paramètre:
+        objet: signifie l'objet à afficher.
+
+    """ 
+    if objet == "dynamite":
+        image = pygame.image.load("dynamite.png")
+    elif objet == "boots":
+        image = pygame.image.load("boots.png")
+    elif objet == "pickaxe":
+        image = pygame.image.load("pikaxe.png")
+    elif objet == "4":
+        image = pygame.image.load("4.png")
+    elif objet == "5":
+        image = pygame.image.load("5.png")
+    image = pygame.transform.scale(image, (100, 100))
+    fenetre.blit(image, (600, 600))
+
+def selection_objet():
+
+    """
+    Cette fonction permet de selectionner un objet chez le mineur.
+
+    """ 
+    
 
 fin = False
 
