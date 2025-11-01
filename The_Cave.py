@@ -333,7 +333,7 @@ while fin == False:
         afficher_vies()
     if lives == 0:
         fenetre.fill(color)
-        afficher_texte("Dead", 525, 400, textcolor)
+        afficher_texte("Dead", 450, 500, textcolor)
         fin = True
     # Mise à jour de l'affichage
     pygame.display.flip()
