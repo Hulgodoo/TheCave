@@ -1,5 +1,6 @@
 import pygame
 import time
+import random
 
 # Initialisation de pygame
 pygame.init()
@@ -207,7 +208,7 @@ def monstres():
     """
     global level
 
-    level == "monstres"
+    level = "monstres"
     # Charger une image et la redimensionner 
     image = pygame.image.load("dragon.png")
     image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
@@ -216,7 +217,7 @@ def monstres():
     #Afficher du texte
     afficher_texte("Fight !", 500, 400, textcolor)
 
-    dessiner_bouton("Taper", 500, 625, 200, 50, color, color, textcolor, choix_droite)
+    dessiner_bouton("Hit", 525, 625, 200, 50, color, color, textcolor, choix_droite)
 
 def mineur():
     
@@ -226,7 +227,7 @@ def mineur():
     """
     global level
 
-    level == "mineur"
+    level = "mineur"
     # Charger une image et la redimensionner 
     image = pygame.image.load("mineur.png")
     image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
@@ -234,8 +235,9 @@ def mineur():
 
     #Afficher du texte
     afficher_texte("Take this", 425, 400, textcolor)
-
+    selection_objet()
     dessiner_bouton("^", 530, 825, 200, 50, color, color, textcolor, choix_gauche)
+    level = "wait"
 
 def boss():
        
@@ -277,13 +279,13 @@ def afficher_objet(objet):
     elif objet == "boots":
         image = pygame.image.load("boots.png")
     elif objet == "pickaxe":
-        image = pygame.image.load("pikaxe.png")
+        image = pygame.image.load("pickaxe.png")
     elif objet == "4":
-        image = pygame.image.load("4.png")
+        image = pygame.image.load("layout.png")
     elif objet == "5":
-        image = pygame.image.load("5.png")
-    image = pygame.transform.scale(image, (100, 100))
-    fenetre.blit(image, (600, 600))
+        image = pygame.image.load("boots.png")
+    image = pygame.transform.scale(image, (200, 200))
+    fenetre.blit(image, (525, 600))
 
 def selection_objet():
 
@@ -291,7 +293,11 @@ def selection_objet():
     Cette fonction permet de selectionner un objet chez le mineur.
 
     """ 
-    
+    global inventory
+    global objects
+
+    obj = random.choice(objects)
+    afficher_objet(obj)
 
 fin = False
 
