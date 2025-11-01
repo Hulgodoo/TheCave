@@ -6,8 +6,8 @@ import random
 pygame.init()
 
 # Paramètres de la fenêtre
-LARGEUR= 1300
-HAUTEUR = 900
+LARGEUR= 1000
+HAUTEUR = 1000
 fenetre = pygame.display.set_mode((LARGEUR, HAUTEUR))
 pygame.display.set_caption("The Cave")
 
@@ -170,9 +170,9 @@ def menu():
     fenetre.blit(image1, (0, 0))
     
     #Afficher du texte
-    afficher_texte("The Cave", 425, 400, textcolor)
+    afficher_texte("The Cave", 325, 500, textcolor)
 
-    dessiner_bouton("Play", 525, 625, 200, 50, color, color, textcolor, choix_droite)
+    dessiner_bouton("Play", 400, 750, 200, 50, color, color, textcolor, choix_droite)
 
 def choices():
 
@@ -186,18 +186,18 @@ def choices():
     level = "choices"
     # Charger une image et la redimensionner 
     gauche = pygame.image.load("cart.png")
-    gauche = pygame.transform.scale(gauche, (650, 900))
+    gauche = pygame.transform.scale(gauche, (500, 1000))
     fenetre.blit(gauche, (0, 0))
 
     droite = pygame.image.load("entrance.png")
-    droite = pygame.transform.scale(droite, (650, 900))
-    fenetre.blit(droite, (650, 0))
+    droite = pygame.transform.scale(droite, (500, 1000))
+    fenetre.blit(droite, (500, 0))
 
     #Afficher du texte
-    afficher_texte("Choose.", 500, 400, textcolor)
+    afficher_texte("Choose.", 400, 500, textcolor)
 
-    dessiner_bouton("^", 250, 550, 200, 50, color, color, textcolor, choix_gauche)
-    dessiner_bouton("^", 900, 550, 200, 50, color, color, textcolor, choix_droite)
+    dessiner_bouton("^", 200, 700, 200, 50, color, color, textcolor, choix_gauche)
+    dessiner_bouton("^", 700, 700, 200, 50, color, color, textcolor, choix_droite)
     
 
 def monstres():
@@ -215,9 +215,9 @@ def monstres():
     fenetre.blit(image, (0, 0))
 
     #Afficher du texte
-    afficher_texte("Fight !", 500, 400, textcolor)
+    afficher_texte("Fight !", 375, 500, textcolor)
 
-    dessiner_bouton("Hit", 525, 625, 200, 50, color, color, textcolor, choix_droite)
+    dessiner_bouton("Hit", 400, 750, 200, 50, color, color, textcolor, choix_droite)
 
 def mineur():
     
@@ -229,14 +229,14 @@ def mineur():
 
     level = "mineur"
     # Charger une image et la redimensionner 
-    image = pygame.image.load("mineur.png")
+    image = pygame.image.load("mineur.jpeg")
     image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
     fenetre.blit(image, (0, 0))
 
     #Afficher du texte
-    afficher_texte("Take this", 425, 400, textcolor)
+    afficher_texte("Take this", 325, 500, textcolor)
     selection_objet()
-    dessiner_bouton("^", 530, 825, 200, 50, color, color, textcolor, choix_gauche)
+    dessiner_bouton("^", 400, 900, 200, 50, color, color, textcolor, choix_gauche)
     level = "wait"
 
 def boss():
@@ -285,7 +285,7 @@ def afficher_objet(objet):
     elif objet == "5":
         image = pygame.image.load("boots.png")
     image = pygame.transform.scale(image, (200, 200))
-    fenetre.blit(image, (525, 600))
+    fenetre.blit(image, (400, 600))
 
 def selection_objet():
 
