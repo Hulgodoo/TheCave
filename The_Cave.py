@@ -33,6 +33,8 @@ nb_level = 0
 lives = 5
 objects = ("dynamite", "boots", "pickaxe", "4", "5")
 inventory = ()
+random_object = "vide"
+
 
 def afficher_texte(texte, x, y, couleur):
     """
@@ -111,6 +113,9 @@ def choix_gauche():
     """
     global level
     global nb_level
+    global random_object
+    global inventory
+    global lives
 
     if level == "menu":
         level = "choices"
@@ -124,7 +129,10 @@ def choix_gauche():
         nb_level = nb_level + 1
     elif level == "mineur":
         level = "choices"
-        nb_level = nb_level + 1  
+        nb_level = nb_level + 1
+        inventory = inventory + (random_object,)
+        random_object = "vide"
+    
 
 
 def choix_droite():
@@ -222,22 +230,26 @@ def monstres():
 def mineur():
     
     """
-    Cette fonction permet d'afficher les monstres.
+    Cette fonction permet d'afficher le mineur.
 
     """
     global level
+    global random_object
 
-    level = "mineur"
     # Charger une image et la redimensionner 
-    image = pygame.image.load("mineur.jpeg")
+    image = pygame.image.load("mineur.png")
     image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
     fenetre.blit(image, (0, 0))
 
-    #Afficher du texte
+    # Sélectionner un objet seulement la première fois
+    if random_object == "vide":
+        random_object = random.choice(objects)
+        
+    # Afficher texte et objet
     afficher_texte("Take this", 325, 500, textcolor)
-    selection_objet()
+    afficher_objet(random_object)
     dessiner_bouton("^", 400, 900, 200, 50, color, color, textcolor, choix_gauche)
-    level = "wait"
+    
 
 def boss():
        
@@ -287,17 +299,6 @@ def afficher_objet(objet):
     image = pygame.transform.scale(image, (200, 200))
     fenetre.blit(image, (400, 600))
 
-def selection_objet():
-
-    """
-    Cette fonction permet de selectionner un objet chez le mineur.
-
-    """ 
-    global inventory
-    global objects
-
-    obj = random.choice(objects)
-    afficher_objet(obj)
 
 fin = False
 
