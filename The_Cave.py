@@ -30,7 +30,7 @@ image1 = pygame.transform.scale(image1, (LARGEUR, HAUTEUR))
 # Variables du jeu
 level = "menu"
 nb_level = 0
-lives = 5
+lives = 3
 objects = ("dynamite", "boots", "pickaxe", "4", "5")
 inventory = ()
 random_object = "vide"
@@ -288,11 +288,21 @@ def boss():
     image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
     fenetre.blit(image, (0, 0))
     pygame.display.flip()
-    pygame.time.wait(2000)  # 2000 ms = 2 secondes
+    pygame.time.wait(1500)
     
     fenetre.fill(color)
     pygame.display.flip()
-    pygame.time.wait(1000)
+    pygame.time.wait(400)
+
+    image1 = pygame.image.load("boss-tonnerre.png")
+    image1 = pygame.transform.scale(image1, (LARGEUR, HAUTEUR))
+    fenetre.blit(image1, (0, 0))
+    pygame.display.flip()
+    pygame.time.wait(800)
+
+    fenetre.fill(color)
+    pygame.display.flip()
+    pygame.time.wait(400)
     
     image2 = pygame.image.load("boss1.png")
     image2 = pygame.transform.scale(image2, (LARGEUR, HAUTEUR))
