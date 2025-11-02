@@ -125,7 +125,6 @@ def choix_gauche():
         level = "mineur"
     elif level == "monstres":
         level = "choices"
-        lives = lives - 1
         nb_level = nb_level + 1
     elif level == "mineur":
         level = "choices"
@@ -152,7 +151,6 @@ def choix_droite():
         level = "mineur"
     elif level == "monstres":
         level = "choices"
-        lives = lives - 1
         nb_level = nb_level + 1
     elif level == "mineur":
         level = "choices"
@@ -223,9 +221,35 @@ def monstres():
     fenetre.blit(image, (0, 0))
 
     #Afficher du texte
-    afficher_texte("Fight !", 375, 500, textcolor)
+    afficher_texte("Run !", 375, 100, textcolor)
+    dessiner_bouton("Throw something", 140, 650, 200, 50, color, color, textcolor, vider_inventaire)
+    dessiner_bouton("-1 live", 350, 850, 200, 50, color, color, textcolor, perte_vie)
 
-    dessiner_bouton("Hit", 400, 750, 200, 50, color, color, textcolor, choix_droite)
+def vider_inventaire():
+    """
+    Cette fonction permet de vider l'inventaire.
+
+    """
+    global inventory
+    global level
+
+    if len(inventory) > 0:
+        inventory = inventory[:-1]
+        choix_droite()
+    else:
+        perte_vie()
+
+def perte_vie():
+    """
+    Cette fonction permet de faire perdre une vie au joueur.
+
+    """
+    global lives
+    global level
+
+    lives = lives - 1
+    if level == "monstres":
+        choix_droite()
 
 def mineur():
     
@@ -299,6 +323,32 @@ def afficher_objet(objet):
     image = pygame.transform.scale(image, (200, 200))
     fenetre.blit(image, (400, 600))
 
+def afficher_inventory():
+    """
+    Cette fonction permet d'afficher l'inventaire du joueur.
+
+    """
+    global inventory
+
+    y_position = 50
+
+    for objet in inventory:
+        if objet == "dynamite":
+            image = pygame.image.load("dynamite.png")
+        elif objet == "boots":
+            image = pygame.image.load("boots.png")
+        elif objet == "pickaxe":
+            image = pygame.image.load("pickaxe.png")
+        elif objet == "4":
+            image = pygame.image.load("layout.png")
+        elif objet == "5":
+            image = pygame.image.load("boots.png")
+        
+        image = pygame.transform.scale(image, (50, 50))
+        fenetre.blit(image, (925, y_position))
+        y_position += 60  
+
+
 
 fin = False
 
@@ -322,16 +372,20 @@ while fin == False:
         menu()
     elif level == "choices":
         choices()
-        afficher_vies()    
+        afficher_vies()
+        afficher_inventory()
     elif level == "monstres":
         monstres()
-        afficher_vies() 
+        afficher_vies()
+        afficher_inventory()
     elif level == "mineur":
         mineur()
         afficher_vies()
+        afficher_inventory()
     elif level == "boss":
         boss()
         afficher_vies()
+        afficher_inventory()
     if lives == 0:
         fenetre.fill(color)
         afficher_texte("Dead", 450, 500, textcolor)
