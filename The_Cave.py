@@ -31,9 +31,12 @@ image1 = pygame.transform.scale(image1, (LARGEUR, HAUTEUR))
 level = "menu"
 nb_level = 0
 lives = 3
-objects = ("dynamite", "boots", "pickaxe", "4", "5")
+objects = ("dynamite", "boots", "pickaxe")
 inventory = ()
 random_object = "vide"
+random_monster = "vide"
+input_active = False
+prenom_joueur = ""
 
 
 def afficher_texte(texte, x, y, couleur):
@@ -51,6 +54,38 @@ def afficher_texte(texte, x, y, couleur):
     mots = texte.split(' ')
     ligne_actuelle = ''
     y_offset = 0  
+
+    for mot in mots:
+        # Vérifie si on peut ajouter le mot à la ligne actuelle
+        if font.size(ligne_actuelle + mot)[0] <= LARGEUR - x:
+            ligne_actuelle += mot + ' '
+        else:
+            # Dessine la ligne actuelle et réinitialise pour la nouvelle ligne
+            fenetre.blit(font.render(ligne_actuelle.strip(), True, couleur), (x, y + y_offset))
+            ligne_actuelle = mot + ' '
+            y_offset += font.get_height()  # Augmente l'offset pour la prochaine ligne
+
+    # Dessine la dernière ligne si elle n'est pas vide
+    if ligne_actuelle:
+        fenetre.blit(font.render(ligne_actuelle.strip(), True, couleur), (x, y + y_offset))
+
+def afficher_texte_boss(texte, x, y, couleur):
+    """
+    Cette fonction permet d'afficher du texte pour le boss dans une fenêtre Pygame à partir d'une position donnée (x, y). Si une ligne de texte dépasse
+    la largeur de la fenêtre, elle est automatiquement coupée et continuée à la ligne suivante.
+
+    Paramètres :
+    -----------
+        texte(str) : Le texte à afficher.
+        x(int) : La position en pixels sur l'axe des abscisses (horizontal) où le texte commence à être affiché.
+        y(int) : La position en pixels sur l'axe des ordonnées (vertical) où le texte commence à être affiché.
+        couleur(tuple): Une couleur définie sous forme de tuple (R, G, B) pour la couleur du texte.
+    """
+    mots = texte.split(' ')
+    ligne_actuelle = ''
+    y_offset = 0
+
+    font = pygame.font.Font("KiwiSoda.ttf", 50)
 
     for mot in mots:
         # Vérifie si on peut ajouter le mot à la ligne actuelle
@@ -133,7 +168,6 @@ def choix_gauche():
         random_object = "vide"
     
 
-
 def choix_droite():
     """
     Cette fonction permet de changer de scene lorsqu'on a choisi le bouton de droite. 
@@ -191,19 +225,15 @@ def choices():
 
     level = "choices"
     # Charger une image et la redimensionner 
-    gauche = pygame.image.load("cart.png")
-    gauche = pygame.transform.scale(gauche, (500, 1000))
-    fenetre.blit(gauche, (0, 0))
-
-    droite = pygame.image.load("entrance.png")
-    droite = pygame.transform.scale(droite, (500, 1000))
-    fenetre.blit(droite, (500, 0))
+    image = pygame.image.load("choices.png")
+    image = pygame.transform.scale(image, (1000, 1000))
+    fenetre.blit(image, (0, 0))
 
     #Afficher du texte
-    afficher_texte("Choose.", 400, 500, textcolor)
+    afficher_texte("Choose.", 350, 500, textcolor)
 
-    dessiner_bouton("^", 200, 700, 200, 50, color, color, textcolor, choix_gauche)
-    dessiner_bouton("^", 700, 700, 200, 50, color, color, textcolor, choix_droite)
+    dessiner_bouton("^", 150, 700, 200, 50, color, color, textcolor, choix_gauche)
+    dessiner_bouton("^", 600, 700, 200, 50, color, color, textcolor, choix_droite)
     
 
 def monstres():
@@ -215,7 +245,8 @@ def monstres():
     global level
 
     level = "monstres"
-    # Charger une image et la redimensionner 
+    # Charger une image et la redimensionner
+    
     image = pygame.image.load("dragon.png")
     image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
     fenetre.blit(image, (0, 0))
@@ -284,7 +315,9 @@ def boss():
     global nb_level
     global level
 
-    image = pygame.image.load("final_entrance(wip).png")
+    level = "boss"
+
+    image = pygame.image.load("final_entrance2.png")
     image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
     fenetre.blit(image, (0, 0))
     pygame.display.flip()
@@ -308,8 +341,32 @@ def boss():
     image2 = pygame.transform.scale(image2, (LARGEUR, HAUTEUR))
     fenetre.blit(image2, (0, 0))
 
+    afficher_texte_boss("You have made it this far...", 200, 50, (255, 0, 0))
+    afficher_texte_boss("But this is where your journey ends!", 150, 150, (255, 0, 0))
+    afficher_texte_boss("My monsters will love a kid sandwich.", 125, 750, (255, 0, 0))
+
+    dessiner_bouton("Try to run :D >>", 150, 850, 200, 50, color, color, (255, 0, 0), next_boss_level)
+
     nb_level = 99
-    level = "end"
+
+def next_boss_level():
+    """
+    Cette fonction permet de passer au niveau suivant après le boss.
+
+    """ 
+    global level
+
+
+    if level == "boss":
+        level = "boots"
+    elif level == "boots":
+        level = "dynamite"
+    elif level == "dynamite":
+        level = "pickaxe"
+    elif level == "pickaxe":
+        level = "escape"
+
+
 
 def afficher_objet(objet):
 
@@ -326,10 +383,6 @@ def afficher_objet(objet):
         image = pygame.image.load("boots.png")
     elif objet == "pickaxe":
         image = pygame.image.load("pickaxe.png")
-    elif objet == "4":
-        image = pygame.image.load("layout.png")
-    elif objet == "5":
-        image = pygame.image.load("boots.png")
     image = pygame.transform.scale(image, (200, 200))
     fenetre.blit(image, (400, 600))
 
@@ -349,15 +402,29 @@ def afficher_inventory():
             image = pygame.image.load("boots.png")
         elif objet == "pickaxe":
             image = pygame.image.load("pickaxe.png")
-        elif objet == "4":
-            image = pygame.image.load("layout.png")
-        elif objet == "5":
-            image = pygame.image.load("boots.png")
         
         image = pygame.transform.scale(image, (50, 50))
         fenetre.blit(image, (925, y_position))
         y_position += 60  
 
+def dead():
+    """
+    Cette fonction permet d'afficher l'écran de fin lorsque le joueur n'a plus de vie.
+
+    """
+    global level
+    global fin
+
+    fenetre.fill(color)
+    pygame.display.flip()
+
+    if level == "choices" or level == "mineur" or level == "monstres":
+        afficher_texte("Dead", 200, 450, textcolor)
+    elif level == "boss":
+        afficher_texte_boss("You are a dumb sandwich", 200, 450, textcolor)
+
+    level = "dead"
+    fin = True
 
 
 fin = False
@@ -374,6 +441,9 @@ while fin == False:
             pygame.quit()
     
     afficher_vies()
+    # Vérifier si le joueur est mort
+    if lives <= 0:
+        dead()
     if nb_level == 5:
         level = "boss"
     
@@ -396,10 +466,6 @@ while fin == False:
         boss()
         afficher_vies()
         afficher_inventory()
-    if lives == 0:
-        fenetre.fill(color)
-        afficher_texte("Dead", 450, 500, textcolor)
-        fin = True
     # Mise à jour de l'affichage
     pygame.display.flip()
 time.sleep(5)
