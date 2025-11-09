@@ -30,7 +30,7 @@ image1 = pygame.transform.scale(image1, (LARGEUR, HAUTEUR))
 # Variables du jeu
 level = "menu"
 nb_level = 0
-lives = 3
+lives = 2
 objects = ("dynamite", "boots", "pickaxe")
 inventory = ()
 random_object = "vide"
@@ -350,6 +350,8 @@ def next_boss_level():
 
 
     if level == "bossfight":
+        level = "pause"
+    elif level == "pause":
         level = "dynamite"
     elif level == "dynamite":
         level = "pickaxe"
@@ -357,6 +359,8 @@ def next_boss_level():
         level = "boots"
     elif level == "boots":
         level = "escape"
+    elif level == "escape":
+        level == "menu"
 
 def boss_fail():
     
@@ -384,6 +388,16 @@ def bossfight():
 
     dessiner_bouton("Try to run :D >>", 150, 850, 200, 50, color, color, (255, 0, 0), next_boss_level)
 
+def pause():
+
+    """
+    Cette fonction permet de montrer que tes objets sont utiles.
+
+    """
+    fenetre.fill(color)
+    dessiner_bouton("", 50, 50, 900, 900, color, color, textcolor, next_boss_level)
+    afficher_texte("But you have some objects that can help you.", 50, 50, textcolor)
+
 def dynamite():
 
     """
@@ -397,15 +411,82 @@ def dynamite():
         image = pygame.image.load("dynamite_scene.png")
         image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
         fenetre.blit(image, (0, 0))
-        afficher_texte_boss("bla blz boum", 125, 750, textcolor)
-        dessiner_bouton(">>>", 140, 650, 200, 50, color, color, textcolor, next_boss_level)
+        afficher_texte_boss("You manage to hit the stalactites with your dynamite (so it hit the King of the Cave)...", 75, 650, textcolor)
+        dessiner_bouton(">>>", 400, 750, 200, 50, color, color, textcolor, next_boss_level)
     else:
         image = pygame.image.load("attack_boss.png")
         image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
         fenetre.blit(image, (0, 0))
-        afficher_texte_boss("bla blz zut", 125, 750, textcolor)
-        dessiner_bouton(">>>", 140, 650, 200, 50, color, color, textcolor, boss_fail)
+        afficher_texte_boss("Oh... no explosions", 125, 650, (255, 0, 0))
+        dessiner_bouton(">>>", 400, 750, 200, 50, color, color, textcolor, boss_fail)
 
+def pickaxe():
+
+    """
+    Cette fonction permet d'afficher la scène de fin de la dynamite.
+
+    """
+    global inventory
+
+    # Charger une image et la redimensionner
+    if "pickaxe" in inventory:
+        image = pygame.image.load("umm.png")
+        image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
+        fenetre.blit(image, (0, 0))
+        afficher_texte_boss("You dig a hole with your pickaxe (to escape the King of The Cave)...", 125, 650, textcolor)
+        dessiner_bouton(">>>", 400, 750, 200, 50, color, color, textcolor, next_boss_level)
+    else:
+        image = pygame.image.load("attack_boss.png")
+        image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
+        fenetre.blit(image, (0, 0))
+        afficher_texte_boss("Can't escape yet...", 125, 650, (255, 0, 0))
+        dessiner_bouton(">>>", 400, 750, 200, 50, color, color, textcolor, boss_fail)
+
+def boots():
+
+    """
+    Cette fonction permet d'afficher la scène de fin des bottes.
+
+    """
+    global inventory
+
+    # Charger une image et la redimensionner
+    if "boots" in inventory:
+        image = pygame.image.load("boots_scene.png")
+        image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
+        fenetre.blit(image, (0, 0))
+        afficher_texte_boss("And you run away quickly, thanks to the boots.", 125, 650, textcolor)
+        dessiner_bouton(">>>", 400, 750, 200, 50, color, color, textcolor, next_boss_level)
+    else:
+        image = pygame.image.load("attack_boss.png")
+        image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
+        fenetre.blit(image, (0, 0))
+        afficher_texte_boss("Ok, this is problematic. -_-", 125, 650, (255, 0, 0))
+        dessiner_bouton(">>>", 400, 750, 200, 50, color, color, textcolor, boss_fail)
+
+def escape():
+
+    """
+    Cette fonction permet d'afficher la fin du jeu. (peut être?)
+    
+    """
+    global level
+    
+    fenetre.fill(color)
+    afficher_texte_boss("Congrats! You went out of this cave...", 50, 50, textcolor)
+    pygame.display.flip()
+    pygame.time.wait(2000)
+
+    afficher_texte_boss("And happily running to the exit!", 50, 475, textcolor)
+    pygame.display.flip()
+    pygame.time.wait(2000)
+
+    afficher_texte_boss("One problem, you tripped, and you are just...", 50, 900, textcolor)
+    pygame.display.flip()
+    pygame.time.wait(3500)
+
+    next_boss_level()
+    level = "menu"
 
 def afficher_objet(objet):
 
@@ -509,6 +590,8 @@ while fin == False:
         bossfight()
         afficher_vies()
         afficher_inventory()
+    elif level == "pause":
+        pause()
     elif level == "dynamite":
         dynamite()
         afficher_vies()
