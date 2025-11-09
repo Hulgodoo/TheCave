@@ -315,7 +315,7 @@ def boss():
     global nb_level
     global level
 
-    level = "boss"
+    level = "bossfight"
 
     image = pygame.image.load("final_entrance2.png")
     image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
@@ -357,15 +357,36 @@ def next_boss_level():
     global level
 
 
-    if level == "boss":
-        level = "boots"
-    elif level == "boots":
+    if level == "bossfight":
         level = "dynamite"
     elif level == "dynamite":
         level = "pickaxe"
     elif level == "pickaxe":
+        level = "boots"
+    elif level == "boots":
         level = "escape"
 
+def dynamite():
+
+    """
+    Cette fonction permet d'afficher la scène de fin de la dynamite.
+
+    """
+    global inventory
+
+    # Charger une image et la redimensionner
+    if "dynamite" in inventory:
+        image = pygame.image.load("dynamite_scene.png")
+        image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
+        fenetre.blit(image, (0, 0))
+        afficher_texte_boss("bla blz boum", 125, 750, textcolor)
+        dessiner_bouton(">>>", 140, 650, 200, 50, color, color, textcolor, next_boss_level())
+    else:
+        image = pygame.image.load("attack_boss.png")
+        image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
+        fenetre.blit(image, (0, 0))
+        afficher_texte_boss("bla blz zut", 125, 750, textcolor)
+        dessiner_bouton(">>>", 140, 650, 200, 50, color, color, textcolor, (next_boss_level(), perte_vie()))
 
 
 def afficher_objet(objet):
@@ -466,6 +487,18 @@ while fin == False:
         boss()
         afficher_vies()
         afficher_inventory()
+    elif level == "dynamite":
+        dynamite()
+        afficher_vies()
+    elif level == "pickaxe":
+        pickaxe()
+        afficher_vies()
+    elif level == "boots":
+        boots()
+        afficher_vies()
+    elif level == "escape":
+        escape()
+        afficher_vies()
     # Mise à jour de l'affichage
     pygame.display.flip()
 time.sleep(5)
