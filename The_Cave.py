@@ -337,17 +337,9 @@ def boss():
     pygame.display.flip()
     pygame.time.wait(400)
     
-    image2 = pygame.image.load("boss1.png")
-    image2 = pygame.transform.scale(image2, (LARGEUR, HAUTEUR))
-    fenetre.blit(image2, (0, 0))
-
-    afficher_texte_boss("You have made it this far...", 200, 50, (255, 0, 0))
-    afficher_texte_boss("But this is where your journey ends!", 150, 150, (255, 0, 0))
-    afficher_texte_boss("My monsters will love a kid sandwich.", 125, 750, (255, 0, 0))
-
-    dessiner_bouton("Try to run :D >>", 150, 850, 200, 50, color, color, (255, 0, 0), next_boss_level)
 
     nb_level = 99
+    level = "bossfight"
 
 def next_boss_level():
     """
@@ -366,6 +358,32 @@ def next_boss_level():
     elif level == "boots":
         level = "escape"
 
+def boss_fail():
+    
+    """
+    Cette fonction permet de faire les conséquences si on n'a pas l'objet voulu au boss.
+
+    """
+    perte_vie()
+    next_boss_level()
+
+def bossfight():
+
+    """
+    Cette fonction permet d'afficher le boss du jeu.
+
+    """
+
+    image2 = pygame.image.load("boss1.png")
+    image2 = pygame.transform.scale(image2, (LARGEUR, HAUTEUR))
+    fenetre.blit(image2, (0, 0))
+
+    afficher_texte_boss("You have made it this far...", 200, 50, (255, 0, 0))
+    afficher_texte_boss("But this is where your journey ends!", 150, 150, (255, 0, 0))
+    afficher_texte_boss("My monsters will love a kid sandwich.", 125, 750, (255, 0, 0))
+
+    dessiner_bouton("Try to run :D >>", 150, 850, 200, 50, color, color, (255, 0, 0), next_boss_level)
+
 def dynamite():
 
     """
@@ -380,13 +398,13 @@ def dynamite():
         image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
         fenetre.blit(image, (0, 0))
         afficher_texte_boss("bla blz boum", 125, 750, textcolor)
-        dessiner_bouton(">>>", 140, 650, 200, 50, color, color, textcolor, next_boss_level())
+        dessiner_bouton(">>>", 140, 650, 200, 50, color, color, textcolor, next_boss_level)
     else:
         image = pygame.image.load("attack_boss.png")
         image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
         fenetre.blit(image, (0, 0))
         afficher_texte_boss("bla blz zut", 125, 750, textcolor)
-        dessiner_bouton(">>>", 140, 650, 200, 50, color, color, textcolor, (next_boss_level(), perte_vie()))
+        dessiner_bouton(">>>", 140, 650, 200, 50, color, color, textcolor, boss_fail)
 
 
 def afficher_objet(objet):
@@ -485,6 +503,10 @@ while fin == False:
         afficher_inventory()
     elif level == "boss":
         boss()
+        afficher_vies()
+        afficher_inventory()
+    elif level == "bossfight":
+        bossfight()
         afficher_vies()
         afficher_inventory()
     elif level == "dynamite":
