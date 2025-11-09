@@ -5,6 +5,9 @@ import random
 # Initialisation de pygame
 pygame.init()
 
+# Initialiser le module mixer
+pygame.mixer.init()
+
 # Paramètres de la fenêtre
 LARGEUR= 1000
 HAUTEUR = 1000
@@ -35,8 +38,14 @@ objects = ("dynamite", "boots", "pickaxe")
 inventory = ()
 random_object = "vide"
 random_monster = "vide"
-input_active = False
-prenom_joueur = ""
+monsters = ("dragon", "ghost", "pumpkin")
+new_game = False
+
+# Charger les sons
+# Charger un effet sonore
+hit = pygame.mixer.Sound("hit.mp3")
+thunder = pygame.mixer.Sound("tonnerre.mp3")
+
 
 
 def afficher_texte(texte, x, y, couleur):
@@ -176,6 +185,7 @@ def choix_droite():
     global level
     global nb_level
     global lives
+    global random_monster
 
     if level == "menu":
         level = "choices"
@@ -189,6 +199,7 @@ def choix_droite():
     elif level == "mineur":
         level = "choices"
         nb_level = nb_level + 1  
+    random_monster = "vide"
 
 
 def afficher_vies():
@@ -206,14 +217,26 @@ def menu():
 
     """
     global level
+    global nb_level
+    global inventory
+    global lives
+    global new_game
+
     # Afficher l'image à l'écran, le coin en haut à gauche à la coordonnée 0,0
     fenetre.blit(image1, (0, 0))
     
     #Afficher du texte
+    if new_game is True:
+        afficher_texte("Falling back to", 200, 400, textcolor)
+        kekw.play()
     afficher_texte("The Cave", 325, 500, textcolor)
 
     dessiner_bouton("Play", 400, 750, 200, 50, color, color, textcolor, choix_droite)
 
+    nb_level = 0
+    lives = 2
+    inventory = ()
+    
 def choices():
 
     """
@@ -243,16 +266,29 @@ def monstres():
 
     """
     global level
+    global random_monster
 
     level = "monstres"
     # Charger une image et la redimensionner
-    
-    image = pygame.image.load("dragon.png")
+    if random_monster == "vide":
+        random_monster = random.choice(monsters)
+    if random_monster == "dragon":
+        image = pygame.image.load("dragon.png")
+    elif random_monster == "ghost":
+        image = pygame.image.load("ghost.png")
+    elif random_monster == "pumpkin":
+        image = pygame.image.load("goofy_pumpkin.png")
     image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
     fenetre.blit(image, (0, 0))
 
     #Afficher du texte
-    afficher_texte("Run !", 375, 100, textcolor)
+    if random_monster == "dragon":
+        afficher_texte("Run !", 375, 100, textcolor)
+    elif random_monster == "ghost":
+        afficher_texte("Boo !", 375, 100, textcolor)
+    elif random_monster == "pumpkin":
+        afficher_texte("Hihihihihi...", 200, 100, textcolor)
+    
     dessiner_bouton("Throw something", 140, 650, 200, 50, color, color, textcolor, vider_inventaire)
     dessiner_bouton("-1 live", 350, 850, 200, 50, color, color, textcolor, perte_vie)
 
@@ -279,6 +315,7 @@ def perte_vie():
     global level
 
     lives = lives - 1
+    hit.play()
     if level == "monstres":
         choix_droite()
 
@@ -327,6 +364,7 @@ def boss():
     pygame.display.flip()
     pygame.time.wait(400)
 
+    thunder.play()
     image1 = pygame.image.load("boss-tonnerre.png")
     image1 = pygame.transform.scale(image1, (LARGEUR, HAUTEUR))
     fenetre.blit(image1, (0, 0))
@@ -396,7 +434,7 @@ def pause():
     """
     fenetre.fill(color)
     dessiner_bouton("", 50, 50, 900, 900, color, color, textcolor, next_boss_level)
-    afficher_texte("But you have some objects that can help you.", 50, 50, textcolor)
+    afficher_texte("You might have some objects that can help you...", 50, 50, textcolor)
 
 def dynamite():
 
@@ -471,7 +509,8 @@ def escape():
     
     """
     global level
-    
+    global new_game
+
     fenetre.fill(color)
     afficher_texte_boss("Congrats! You went out of this cave...", 50, 50, textcolor)
     pygame.display.flip()
@@ -485,7 +524,7 @@ def escape():
     pygame.display.flip()
     pygame.time.wait(3500)
 
-    next_boss_level()
+    new_game = True
     level = "menu"
 
 def afficher_objet(objet):
@@ -540,7 +579,7 @@ def dead():
 
     if level == "choices" or level == "mineur" or level == "monstres":
         afficher_texte("Dead", 200, 450, textcolor)
-    elif level == "boss":
+    elif level == "boots" or level == "dynamite" or level == "pickaxe":
         afficher_texte_boss("You are a dumb sandwich", 200, 450, textcolor)
 
     level = "dead"
