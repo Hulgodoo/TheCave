@@ -284,7 +284,7 @@ def monstres():
     if random_monster == "dragon":
         afficher_texte("Run !", 375, 100, textcolor)
     elif random_monster == "ghost":
-        afficher_texte("Boo !", 375, 100, textcolor)
+        afficher_texte("Boo !", 375, 100, (194, 178, 128))
     elif random_monster == "pumpkin":
         afficher_texte("Hihihihihi...", 200, 100, textcolor)
     
@@ -578,7 +578,7 @@ def dead():
 
     if level == "choices" or level == "mineur" or level == "monstres":
         afficher_texte("Dead", 200, 450, textcolor)
-    elif level == "boots" or level == "dynamite" or level == "pickaxe":
+    elif level == "dynamite" or level == "pickaxe" or level == "boots" or level == "escape":
         afficher_texte_boss("You are a dumb sandwich", 200, 450, textcolor)
 
     level = "dead"
