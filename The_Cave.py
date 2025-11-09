@@ -228,7 +228,6 @@ def menu():
     #Afficher du texte
     if new_game is True:
         afficher_texte("Falling back to", 200, 400, textcolor)
-        kekw.play()
     afficher_texte("The Cave", 325, 500, textcolor)
 
     dessiner_bouton("Play", 400, 750, 200, 50, color, color, textcolor, choix_droite)
