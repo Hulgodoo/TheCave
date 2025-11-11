@@ -467,7 +467,7 @@ def pickaxe():
 
     # Charger une image et la redimensionner
     if "pickaxe" in inventory:
-        image = pygame.image.load("umm.png")
+        image = pygame.image.load("pickaxe_scene.png")
         image = pygame.transform.scale(image, (LARGEUR, HAUTEUR))
         fenetre.blit(image, (0, 0))
         afficher_texte_boss("You dig a hole with your pickaxe (to escape the King of The Cave)...", 125, 650, textcolor)
